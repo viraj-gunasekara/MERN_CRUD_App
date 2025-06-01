@@ -4,14 +4,41 @@
 import express from "express";
 import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
+import Product from "./models/product.model.js";
 
 dotenv.config();
 
 const app = express();
 
-//create a route with get method
-app.get("/products", (req,res) => {
-    
+//Middleware (runs, before send the response back to the client)
+app.use(express.json()); //allow us to accept JSON data in the req.body
+
+/*CREATE endpoint*/
+//create product route with post method
+app.post("/api/products", async (req,res) => { //make the fun async so can use await keyword
+    //get the user pass, product
+    const product = req.body; //user will send this data
+
+    //check the requirements are empty
+    if(!product.name || !product.price || !product.image){
+        return res.status(400).json({success:false, message: "Please provide all fields"});
+    }
+
+    //if above check passed (user pass everything)
+    //create new product (from product model)
+    const newProduct = new Product(product);
+
+    try {
+        //save the product to db
+        await newProduct.save();
+        //201 Created status code for successfully created
+        res.status(201).json({success: true, data: newProduct});
+    } catch (error) {
+        //colsole the error
+        console.error("Error in create product:", error.message);
+        //500 status code for Internal Server Error
+        res.status(500).json({success: false, message: "Server Error"});
+    }
 });
 
 //view: access to db uri
