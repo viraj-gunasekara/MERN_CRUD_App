@@ -13,6 +13,19 @@ const app = express();
 //Middleware (runs, before send the response back to the client)
 app.use(express.json()); //allow us to accept JSON data in the req.body
 
+/*GET ALL endpoint*/
+//get all-products in db route with get method
+app.get("/api/products", async (req, res) => {
+    try {
+        //fetch all the products
+        const products = await Product.find({});
+        res.status(200).json({success: true, data: products});
+    } catch (error) {
+        console.log("error infetching products:", error.message); //put of debugging purposes
+        res.status(500).json({success: false, message: "Server error"});
+    }
+})
+
 /*CREATE endpoint*/
 //create product route with post method
 app.post("/api/products", async (req,res) => { //make the fun async so can use await keyword
@@ -42,7 +55,7 @@ app.post("/api/products", async (req,res) => { //make the fun async so can use a
 });
 
 /*DELETE endpoint*/
-//delete product route with delete method - we should pass id
+//delete product route with delete method - should pass id
 app.delete("/api/products/:id", async (req,res) => {
     //seperatly get the id from the url
     const {id} = req.params;
@@ -55,6 +68,7 @@ app.delete("/api/products/:id", async (req,res) => {
         res.status(200).json({success: true, message: "Product Deleted"});
     } catch (error) {
         //if user pass invalide object id
+        console.log("error in deleting product:", error.message);
         //404 status code for product-not-found error
         res.status(404).json({success: false, message: "Product not found!"});
     }
