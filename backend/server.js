@@ -5,6 +5,7 @@ import express from "express";
 import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
 import Product from "./models/product.model.js";
+import mongoose from "mongoose";
 
 dotenv.config();
 
@@ -50,6 +51,29 @@ app.post("/api/products", async (req,res) => { //make the fun async so can use a
         //colsole the error
         console.error("Error in create product:", error.message);
         //500 status code for Internal Server Error
+        res.status(500).json({success: false, message: "Server Error"});
+    }
+});
+
+/*UPDATE endpoint*/
+//update product route with post method
+app.put("/api/products/:id", async (req,res) => {
+    //seperatly get the id from the url
+    const {id} = req.params;
+
+    //get the fields of passed object
+    const product = req.body;
+
+    //if user pass invalide object id
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        res.status(404).json({success: false, message: "Invalid Product Id"});
+    }
+
+    //if user pass valide object id
+    try {
+        const updatedProduct = await Product.findByIdAndUpdate(id, product, {new:true});
+        res.status(200).json({success: true, data: updatedProduct});
+    } catch (error) {
         res.status(500).json({success: false, message: "Server Error"});
     }
 });
