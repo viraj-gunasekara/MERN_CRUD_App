@@ -41,6 +41,25 @@ app.post("/api/products", async (req,res) => { //make the fun async so can use a
     }
 });
 
+/*DELETE endpoint*/
+//delete product route with delete method - we should pass id
+app.delete("/api/products/:id", async (req,res) => {
+    //seperatly get the id from the url
+    const {id} = req.params;
+    //console.log("id:",id);
+
+    try {
+        //if user pass valide object id - delete it
+        await Product.findByIdAndDelete(id);
+        //200 status code for Success Deletion
+        res.status(200).json({success: true, message: "Product Deleted"});
+    } catch (error) {
+        //if user pass invalide object id
+        //404 status code for product-not-found error
+        res.status(404).json({success: false, message: "Product not found!"});
+    }
+})
+
 //view: access to db uri
 // console.log(process.env.MONGO_URI);
 
