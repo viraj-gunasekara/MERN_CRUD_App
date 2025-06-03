@@ -19,7 +19,7 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import React from 'react'
+import React, { useState } from 'react'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import { useProductStore } from '../store/product';
 
@@ -28,6 +28,36 @@ const ProductCard = ({product}) => {
     // text color change with dark/light mode
     const textColor = useColorModeValue("gray.600", "gray.200");
     const bg = useColorModeValue("white", "gray.800");
+
+    //show product initial values in update product modal
+    const [updatedProduct, setUpdatedProduct] = useState(product);
+
+    // update product function take from product.js
+    const {updateProduct} = useProductStore()
+    const handleUpdateProduct = async (pid, updatedProduct) => {
+        const {success, message} = await updateProduct(pid, updatedProduct);
+        onClose();
+        //toast
+        if(!success){
+            toast({
+              title: "Error",
+              description: "Product not updated.",
+              status: "error",
+              duration: 3000,
+              isClosable: true,
+              position: "top",
+            }); 
+        }else {
+            toast({
+              title: "Success",
+              description: "Product updated Successfully!",
+              status: "success",
+              duration: 3000,
+              isClosable: true,
+              position: "top",
+            }); 
+        }
+    }
 
     //modal to update product
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -117,35 +147,31 @@ const ProductCard = ({product}) => {
               <Input
                 placeholder="Product Name"
                 name="name"
-                // value={newProduct.name}
-                // onChange={(e) =>
-                //   setNewProduct({ ...newProduct, name: e.target.value })
-                // }
+                value={updatedProduct.name}
+                onChange={(e) => setUpdatedProduct({...updatedProduct, name: e.target.value})}
               />
 
               <Input
                 placeholder="Product Price"
                 name="price"
-                // value={newProduct.price}
-                // onChange={(e) =>
-                //   setNewProduct({ ...newProduct, price: e.target.value })
-                // }
+                value={updatedProduct.price}
+                onChange={(e) => setUpdatedProduct({...updatedProduct, price: e.target.value})}
               />
 
               <Input
                 placeholder="Product Image"
                 name="image"
-                // value={newProduct.image}
-                // onChange={(e) =>
-                //   setNewProduct({ ...newProduct, image: e.target.value })
-                // }
+                value={updatedProduct.image}
+                onChange={(e) => setUpdatedProduct({...updatedProduct, image: e.target.value})}
               />
 
             </VStack>
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3}>
+            <Button colorScheme="blue" mr={3}
+                onClick={() => handleUpdateProduct(product._id, updatedProduct)}
+            >
                 Update
             </Button>
             <Button variant={'ghost'} onClick={onClose}>
