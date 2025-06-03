@@ -1,8 +1,10 @@
 import React from "react";
-import { Button, Container, Flex, HStack, Link, Text, useColorMode } from "@chakra-ui/react";
+import { Button, Container, Flex, HStack, Text, useColorMode } from "@chakra-ui/react";
 import { FaRegSquarePlus } from "react-icons/fa6";
 import { GoSun } from "react-icons/go";
 import { LuMoonStar } from "react-icons/lu";
+
+import { Link } from "react-router-dom"
 
 const Navbar = () => {
 
@@ -30,6 +32,7 @@ const Navbar = () => {
           textTransform={"uppercase"}
           textAlign={"center"}
         >
+          {/* Link should come from reacrRouterDom */}
           <Link to={"/"}>Shopping Store</Link>
         </Text>
 
