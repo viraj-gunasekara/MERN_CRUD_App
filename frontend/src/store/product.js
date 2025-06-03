@@ -35,10 +35,25 @@ export const useProductStore = create((set) => ({
         
     },
 
-    //Get Products from Db to show in homw screen
+    //Get Products from Db to show in home screen
     fetchProducts: async () => {
         const res = await fetch("/api/products");
         const data = await res.json();
         set({ products: data.data });
+    },
+
+    //Delete Product
+    deleteProduct: async (pid) => {
+        const res = await fetch(`/api/products/${pid}`, {
+            method: "DELETE",
+        });
+        // see whether the delete is success or not
+        const data = await res.json();
+        if(!data.success) return {success: false, message: data.message};
+
+        // when product delete: immediatly update ui, without need of refresh
+        set(state => ({products: state.products.filter(product => product._id !== pid)}));
+
+        return {success: true, message: data.message};
     },
 }))

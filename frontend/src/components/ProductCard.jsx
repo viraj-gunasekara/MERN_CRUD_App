@@ -1,12 +1,42 @@
-import { Box, Heading, HStack, IconButton, Image, Text, useColorModeValue } from '@chakra-ui/react'
+import { Box, Heading, HStack, IconButton, Image, Text, useColorModeValue, useToast } from '@chakra-ui/react'
 import React from 'react'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
+import { useProductStore } from '../store/product';
 
 const ProductCard = ({product}) => {
 
     // text color change with dark/light mode
     const textColor = useColorModeValue("gray.600", "gray.200");
     const bg = useColorModeValue("white", "gray.800");
+
+    // delete product function take from product.js
+    const {deleteProduct} = useProductStore()
+    const toast = useToast()
+
+    const handleDeleteProduct = async (pid) => {
+        const {success,message} = await deleteProduct(pid)
+
+        // toast message show based on state of the delete success or not
+        if(!success){
+            toast({
+              title: "Error",
+              description: message,
+              status: "error",
+              duration: 3000,
+              isClosable: true,
+              position: "top",
+            }); 
+        }else {
+            toast({
+              title: "Success",
+              description: message,
+              status: "success",
+              duration: 3000,
+              isClosable: true,
+              position: "top",
+            }); 
+        }
+    }
 
   return (
     <Box
@@ -42,7 +72,7 @@ const ProductCard = ({product}) => {
                 // onClick={onOpen} 
                 colorScheme='blue'/>
                 <IconButton icon={<DeleteIcon/>}
-                // onClick={() => handleDelete(product.id)} 
+                onClick={() => handleDeleteProduct(product._id)}
                 colorScheme='red'/>
             </HStack>
         </Box>

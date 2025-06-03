@@ -47,7 +47,9 @@ const HomePage = () => {
         </SimpleGrid>
 
         {/* when no products to show */}
-        <Text
+        {/* if products array length is zero, then only show this No products text */}
+        {products.length === 0 && (
+          <Text
           fontSize={'xl'}
           textAlign={'center'}
           fontWeight={'bold'}
@@ -65,6 +67,7 @@ const HomePage = () => {
             </Text>
           </Link>
         </Text>
+        )}
       </VStack>
     </Container>
   )
