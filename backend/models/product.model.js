@@ -6,19 +6,19 @@ const productSchema = new mongoose.Schema({
     //name object
     name:{
         type: String,
-        required: true
+        required: true,
     },
     price:{
         type: Number,
-        required: true
+        required: true,
     },
     image:{
         type: String,
-        required: true
+        required: true,
     },
 },{
     //timestamp to show: createdAt, updatedAt
-    timestamps: true
+    timestamps: true,
 });
 
 //depending on schema, create product model
