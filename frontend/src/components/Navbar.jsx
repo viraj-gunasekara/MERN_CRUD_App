@@ -1,9 +1,13 @@
 import React from "react";
-import { Button, Container, Flex, HStack, Link, Text } from "@chakra-ui/react";
+import { Button, Container, Flex, HStack, Link, Text, useColorMode } from "@chakra-ui/react";
 import { FaRegSquarePlus } from "react-icons/fa6";
-import { MdOutlineLightMode } from "react-icons/md";
+import { GoSun } from "react-icons/go";
+import { LuMoonStar } from "react-icons/lu";
 
 const Navbar = () => {
+
+    const {colorMode, toggleColorMode} = useColorMode();
+
   return (
     <Container maxW={"1140px"} px={4}>
       <Flex
@@ -35,8 +39,8 @@ const Navbar = () => {
               <FaRegSquarePlus fontSize={20} />
             </Button>
           </Link>
-          <Button>
-            <MdOutlineLightMode fontSize={20} />
+          <Button onClick={toggleColorMode}>
+            {colorMode === "light" ? <LuMoonStar fontSize={20}/> : <GoSun fontSize={20}/>}
           </Button>
         </HStack>
       </Flex>
