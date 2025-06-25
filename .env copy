@@ -1,0 +1,8 @@
+#rename this file to .env 
+#then, add mongo_uri with cluserUsername & password, clusterDB name
+
+#connection string for db
+MONGO_URI = 
+
+#backend port
+PORT = 5000
